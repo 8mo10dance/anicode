@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 /** Anicode2.4 -Unicorn-
  * 2015/10/30 launch
  *  */
-public class AnicodeMain {
+public class AnicodeManage {
 
     static final String PROFILE = "/home/tomoya/.anicode_profile";
     private static Anicode anicode = new Anicode();
@@ -96,7 +96,7 @@ public class AnicodeMain {
 	anicode.save();
     }
 
-    public static void main(String[] args) {
+    public static void start() {
 	// TODO Auto-generated method stub
 	setting();
 	BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
