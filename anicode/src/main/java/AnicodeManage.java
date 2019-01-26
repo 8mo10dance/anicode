@@ -12,14 +12,14 @@ import java.util.regex.Pattern;
 public class AnicodeManage {
 
     public static AnicodeManage createAnicodeManage(String profile) {
-	Anicode anicode = new Anicode();
 	try {
 	    BufferedReader config = new BufferedReader(new FileReader(new File(profile)));
-	    anicode.setPlayer(config.readLine().split("=")[1]);
-	    anicode.setAnimeDir(config.readLine().split("=")[1]);
-	    anicode.setRecordDir(config.readLine().split("=")[1]);
+	    var playerPath = config.readLine().split("=")[1];
+	    var animeDirPath = config.readLine().split("=")[1];
+	    var recordDirPath = config.readLine().split("=")[1];
 	    config.close();
 
+	    Anicode anicode = new Anicode(playerPath, animeDirPath, recordDirPath);
 	    return new AnicodeManage(anicode);
 	} catch (IOException e) {
 	    e.printStackTrace();

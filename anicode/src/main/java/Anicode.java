@@ -18,24 +18,18 @@ import java.util.regex.Pattern;
  * 2015/10/30 launch */
 public class Anicode {
 
-    private File player;
-    private File animeDir;
-    private File recordDir;
+    private final File player;
+    private final File animeDir;
+    private final File recordDir;
     private List<File> animeList = new ArrayList<File>();
     private List<File> episodes = new ArrayList<File>();
     private File record = null;
     private int ep = 0;
 
-    public void setPlayer(String playerPath) {
+    public Anicode(String playerPath, String animeDirPath, String recordDirPath) {
 	this.player = new File(playerPath);
-    }
-
-    public void setAnimeDir(String animeDirPath) {
 	this.animeDir = new File(animeDirPath);
-    }
-
-    public void setRecordDir(String recordDirPath) {
-	this.recordDir = new File(recordDirPath);
+	this.recordDir = new File(recordDirPath);	
     }
 
     public void readAnimeList() {
