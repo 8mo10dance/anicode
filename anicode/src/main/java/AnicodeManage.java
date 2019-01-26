@@ -11,22 +11,29 @@ import java.util.regex.Pattern;
  *  */
 public class AnicodeManage {
 
-    static final String PROFILE = "/home/tomoya/.anicode_profile";
-    private static Anicode anicode = new Anicode();
-
-    public static void setting() {
+    public static AnicodeManage createAnicodeManage(String profile) {
+	Anicode anicode = new Anicode();
 	try {
-	    BufferedReader config = new BufferedReader(new FileReader(new File(PROFILE)));
+	    BufferedReader config = new BufferedReader(new FileReader(new File(profile)));
 	    anicode.setPlayer(config.readLine().split("=")[1]);
 	    anicode.setAnimeDir(config.readLine().split("=")[1]);
 	    anicode.setRecordDir(config.readLine().split("=")[1]);
 	    config.close();
+
+	    return new AnicodeManage(anicode);
 	} catch (IOException e) {
 	    e.printStackTrace();
 	}
+	return null;
     }
 
-    public static void selectAnime() {
+    private Anicode anicode;
+
+    public AnicodeManage(Anicode anicode) {
+	this.anicode = anicode;
+    }
+    
+    public void selectAnime() {
 	anicode.readAnimeList();
 	int n = 1;
 	for (File f : anicode.getAnimeList()) {
@@ -48,7 +55,7 @@ public class AnicodeManage {
 	}
     }
 
-    public static void selectEpisodes() {
+    public void selectEpisodes() {
 	File record = anicode.getRecord();
 	BufferedReader br;
 	try {
@@ -81,24 +88,22 @@ public class AnicodeManage {
 	}
     }
 
-    public static void randomPlay() {
+    public void randomPlay() {
 	anicode.readAnimeList();
 	anicode.randomPlay();
     }
 
-    public static void sequentialPlay() {
+    public void sequentialPlay() {
 	anicode.readAnimeList();
 	anicode.sequentialPlay();
     }
 
-    public static void play() {
+    public void play() {
 	anicode.play();
 	anicode.save();
     }
 
-    public static void start() {
-	// TODO Auto-generated method stub
-	setting();
+    public void start() {
 	BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 	while (true) {
 	    System.out.println("play[y/N]");
