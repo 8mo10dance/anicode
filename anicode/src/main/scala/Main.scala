@@ -1,8 +1,8 @@
 object Main {
   def main(args: Array[String]) {
-    val manage = AnicodeManage.createAnicodeManage(
+    val client = AnicodeClient.apply(
       "/home/dexmon/.anicode_profile"
     )
-    manage.start
+    client.start
   }
 }
