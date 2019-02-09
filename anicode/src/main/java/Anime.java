@@ -42,27 +42,26 @@ public class Anime {
         return Optional.empty();
     }
 
-    public Optional<Integer> getLatestEpisode() {
-        if (histories.isEmpty()) {
-            return Optional.empty();
-        }
+    public Optional<History> getLatestHistory() {
+        return histories.stream().max(Comparator.comparing(History::getCreatedAt));
+    }
 
-        return Optional.of(histories.get(histories.size() - 1).getEp());
+    public Date getUpdatedAt() {
+        return getLatestHistory().map(History::getCreatedAt).orElse(History.defaultCreatedAt());
+    }
+
+    public Optional<Integer> getLatestEpisode() {
+        return getLatestHistory().map(History::getEp);
     }
 
     public Optional<Integer> getNextEpisode() {
-        var currentEpisode = getLatestEpisode().orElse(0);
-        var nextEpisode = currentEpisode + 1;
-
-        if (containsEpisode(nextEpisode)) {
-            return Optional.of(nextEpisode);
-        } else {
-            return Optional.empty();
+        var currentEp = getLatestEpisode().orElse(0);
+        var nextEp = currentEp + 1;
+        if (containsEpisode(nextEp)) {
+            return Optional.of(nextEp);
         }
-    }
 
-    public boolean isCompleted() {
-        return getEpisodeFiles().size() == getLatestEpisode().orElse(0);
+        return Optional.empty();
     }
 
     private boolean containsEpisode(int ep) {

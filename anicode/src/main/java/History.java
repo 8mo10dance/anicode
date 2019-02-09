@@ -22,4 +22,11 @@ public class History {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         return sdf.format(createdAt) + ":" + ep;
     }
+
+    public static final Date defaultCreatedAt() {
+        var d = new Date();
+        d.setTime(0);
+
+        return d;
+    }
 }

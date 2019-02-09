@@ -74,7 +74,16 @@ public class AnicodeClient {
     }
 
     public void sequentialPlay() {
-		// TODO
+		var animeOpt = anicode.getLastWatchedAnime();
+		var nextEpOpt = animeOpt.flatMap(Anime::getNextEpisode);
+		var pathOpt = nextEpOpt.flatMap(ep -> animeOpt.flatMap(anime -> anime.getAnimeFilePath(ep)));
+		if (pathOpt.isPresent()) {
+			System.out.println("now play " + nextEpOpt.get());
+			player.play(pathOpt.get());
+			anicode.save(animeOpt.get(), nextEpOpt.get());
+		} else {
+			System.out.println("NO NEXT EPISODE");
+		}
     }
 
 

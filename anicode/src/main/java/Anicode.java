@@ -50,12 +50,20 @@ public class Anicode {
 		return anime.getAnimeFilePath(ep);
 	}
 
-    public void save(int id, int ep) {
-		var anime = getAnimeById(id);
+	public void save(Anime anime, int ep) {
 		Calendar c = Calendar.getInstance();
 		var history = new History(ep, c.getTime());
 		record.updateHistory(anime.getName(), history);
+	}
+
+    public void save(int id, int ep) {
+		var anime = getAnimeById(id);
+		save(anime, ep);
     }
+
+    public Optional<Anime> getLastWatchedAnime() {
+		return animeList.stream().max(Comparator.comparing(Anime::getUpdatedAt));
+	}
 
     private Anime getAnimeById(int id) {
 		return animeList.get(id - 1);
