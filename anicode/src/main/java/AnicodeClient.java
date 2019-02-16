@@ -3,6 +3,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Random;
 import java.util.regex.Pattern;
 
 /** Anicode2.4 -Unicorn-
@@ -66,7 +67,19 @@ public class AnicodeClient {
 	}
 
     public void randomPlay() {
-		// TODO
+		var animeList = anicode.getOnGoingAnimeList();
+		if (animeList.isEmpty()) {
+			System.out.println("no ongoing anime");
+			return;
+		}
+
+		var random = new Random();
+		int index = random.nextInt(animeList.size());
+		var anime = animeList.get(index);
+		int ep = anime.getNextEpisode().get();
+		System.out.println("now play " + ep);
+		player.play(anime.getAnimeFilePath(ep).get());
+		anicode.save(anime, ep);
     }
 
     public void sequentialPlay() {

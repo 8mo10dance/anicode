@@ -65,6 +65,10 @@ public class Anicode {
 		return animeList.stream().max(Comparator.comparing(Anime::getUpdatedAt));
 	}
 
+	public List<Anime> getOnGoingAnimeList() {
+		return animeList.stream().filter(Anime::isOnGoing).collect(Collectors.toList());
+	}
+
     private Anime getAnimeById(int id) {
 		return animeList.get(id - 1);
 	}

@@ -64,6 +64,10 @@ public class Anime {
         return Optional.empty();
     }
 
+    public boolean isOnGoing() {
+        return getNextEpisode().isPresent();
+    }
+
     private boolean containsEpisode(int ep) {
         return ep > 0 && ep <= getEpisodeFiles().size();
     }
