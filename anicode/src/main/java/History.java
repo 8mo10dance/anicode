@@ -19,7 +19,7 @@ public class History {
     }
 
     public String toString() {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
         return sdf.format(createdAt) + ":" + ep;
     }
 

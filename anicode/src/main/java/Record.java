@@ -46,7 +46,7 @@ public class Record {
 
     private History toHistory(String line) {
         var strs = line.split(":");
-        var sdf = new SimpleDateFormat("yyyy-MM-dd");
+        var sdf = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
         try {
             var createdAt = sdf.parse(strs[0]);
             var ep = Integer.parseInt(strs[1]);
