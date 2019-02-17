@@ -2,16 +2,14 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.Random;
-import java.util.regex.Pattern;
 
 /** Anicode2.4 -Unicorn-
  * 2015/10/30 launch
  *  */
-public class AnicodeClient {
+public class AnicodeManage {
 
-	public static AnicodeClient apply(String profile) {
+	public static AnicodeManage apply(String profile) {
 		try {
 			BufferedReader config = new BufferedReader(new FileReader(new File(profile)));
 			var playerPath = config.readLine().split("=")[1];
@@ -20,7 +18,7 @@ public class AnicodeClient {
 			config.close();
 			Anicode anicode = Anicode.apply(animeDirPath, recordDirPath);
 			Player player = new Player(playerPath);
-			return new AnicodeClient(anicode, player);
+			return new AnicodeManage(anicode, player);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -30,32 +28,20 @@ public class AnicodeClient {
     private Anicode anicode;
 	private Player player;
 
-	public AnicodeClient(Anicode anicode, Player player) {
+	public AnicodeManage(Anicode anicode, Player player) {
     	this.anicode = anicode;
     	this.player = player;
     }
 
-	public void start() {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		System.out.println("play[y/N]");
-		try {
-			var s = br.readLine();
-			if (s.equals("y")) {
-				selectMode();
-			} else {
-				System.exit(0);
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-			System.exit(-1);
-		}
+    public void getAnimeList() {
+		displayAnimeList();
 	}
 
-	public void normalPlay() {
-		displayAnimeList();
-		int id = selectAnimeId();
+	public void getEpisodeList(int id) {
 		displayEpisodeList(id);
-		int ep = selectEpisode();
+	}
+
+	public void normalPlay(int id, int ep) {
 		var pathOpt = anicode.getAnimeFilePath(id, ep);
 		if (pathOpt.isPresent()) {
 			player.play(pathOpt.get());
@@ -63,7 +49,6 @@ public class AnicodeClient {
 		} else {
 			System.out.println("NO SUCH ANIME or EPISODE !");
 		}
-		start();
 	}
 
     public void randomPlay() {
@@ -94,61 +79,6 @@ public class AnicodeClient {
 			System.out.println("NO NEXT EPISODE");
 		}
     }
-
-
-    public void selectMode() {
-		System.out.println("mode[random:r/sequential:s/normal:n]");
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		try {
-			String str = br.readLine();
-			switch (str) {
-				case "r":
-					randomPlay();
-					break;
-				case "s":
-					sequentialPlay();
-					break;
-				default:
-					normalPlay();
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	public int selectAnimeId() {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		String str;
-		System.out.println("choose anime");
-		try {
-			str = br.readLine();
-			Pattern p = Pattern.compile("[0-9]+");
-			while (!p.matcher(str).find()) {
-				System.out.println("require number input");
-			}
-			return Integer.parseInt(str);
-		} catch (IOException e) {
-			System.out.println("your input is invalid");
-		}
-		return selectAnimeId();
-	}
-
-	public int selectEpisode() {
-		var br = new BufferedReader(new InputStreamReader(System.in));
-		String str;
-		System.out.println("choose episode");
-		try {
-			str = br.readLine();
-			Pattern p = Pattern.compile("[0-9]+");
-			while (!p.matcher(str).find()) {
-				System.out.println("require number input");
-			}
-			return Integer.parseInt(str);
-		} catch (IOException e) {
-			System.out.println("your input is invalid");
-		}
-		return selectAnimeId();
-	}
 
 	private void displayAnimeList() {
 		int n = 1;
