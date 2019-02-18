@@ -7,9 +7,9 @@ object AnicodeClient {
     }).toMap
 
     accumlateOptionList(Seq("ANIME_DIR", "RECORD_DIR", "PLAYER").map(config.get(_))).map {
-      case animeDirPath +: recordDirPath +: playerPath +: Nil => new AnicodeManage(Anicode.apply(animeDirPath, recordDirPath), new Player(playerPath))
+      case animeDirPath +: recordDirPath +: playerPath +: Nil => new AnicodeCLI(animeDirPath, recordDirPath, playerPath)
     } match {
-      case Some(manage) => new AnicodeClient(manage)
+      case Some(anicode) => new AnicodeClient(anicode)
       case None => null // TODO
     }
   }
@@ -21,12 +21,12 @@ object AnicodeClient {
     aOpt.flatMap(a => bOpt.map(b => f(a, b)))
 }
 
-case class AnicodeClient(manage: AnicodeManage) {
+case class AnicodeClient(anicode: AnicodeCLI) {
   def dispatch(action: AnicodeAction): Unit = action match {
-    case GetAnimeList => manage.getAnimeList()
-    case GetEpisodeList(id) => manage.getEpisodeList(id)
-    case NormalPlay(id, ep) => manage.normalPlay(id, ep)
-    case SequentialPlay => manage.sequentialPlay()
-    case RandomPlay => manage.randomPlay()
+    case GetAnimeList => anicode.getAnimeList()
+    case GetEpisodeList(id) => anicode.getEpisodeList(id)
+    case NormalPlay(id, ep) => anicode.normalPlay(id, ep)
+    case SequentialPlay => anicode.sequentialPlay()
+    case RandomPlay => anicode.randomPlay()
   }
 }

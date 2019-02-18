@@ -9,21 +9,14 @@ public class Anicode {
     private List<Anime> animeList;
 	private Record record;
 
-	public static Anicode apply(String animeDirPath, String recordPath) {
+    public Anicode(String animeDirPath, String recordPath) {
 		var animeDir = new File(animeDirPath);
-		var record = new Record(new File(recordPath));
-		var animeList = Arrays
+		this.record = new Record(new File(recordPath));
+		this.animeList = Arrays
 				.stream(animeDir.listFiles())
 				.filter(File::isDirectory)
 				.map(f -> new Anime(f, record.getHistoriesByAnimeName(f.getName())))
 				.collect(Collectors.toList());
-
-		return new Anicode(animeList, record);
-	}
-
-    public Anicode(List<Anime> animeList, Record record) {
-    	this.animeList = animeList;
-		this.record = record;
     }
 
 	public List<String> getAnimeNameList() {
