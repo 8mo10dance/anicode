@@ -1,29 +1,9 @@
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.Random;
 
 /** Anicode2.4 -Unicorn-
  * 2015/10/30 launch
  *  */
 public class AnicodeManage {
-
-	public static AnicodeManage apply(String profile) {
-		try {
-			BufferedReader config = new BufferedReader(new FileReader(new File(profile)));
-			var playerPath = config.readLine().split("=")[1];
-			var animeDirPath = config.readLine().split("=")[1];
-			var recordDirPath = config.readLine().split("=")[1];
-			config.close();
-			Anicode anicode = Anicode.apply(animeDirPath, recordDirPath);
-			Player player = new Player(playerPath);
-			return new AnicodeManage(anicode, player);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return null;
-    }
 
     private Anicode anicode;
 	private Player player;
