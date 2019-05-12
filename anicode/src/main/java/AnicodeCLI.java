@@ -9,7 +9,11 @@ public class AnicodeCLI extends Anicode {
 
 	public AnicodeCLI(String animeDirPath, String recordDirPath, String playerPath) {
 		super(animeDirPath, recordDirPath);
-		this.player = new Player(playerPath);
+		if (playerPath.equals("mock")) {
+			this.player = new MockPlayer();
+		} else {
+			this.player = new ExternalPlayer(playerPath);
+		}
 	}
 
     public void getAnimeList() {
