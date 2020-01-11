@@ -19,9 +19,9 @@ public class Anicode {
 				.collect(Collectors.toList());
     }
 
-	public List<String> getAnimeNameList() {
-		return animeList.stream().map(Anime::getName).collect(Collectors.toList());
-	}
+  public List<Anime> getAnimeList() {
+    return animeList;
+  }
 
 	public List<History> getHistoriesByAnimeId(int id, int limit) {
 		var anime = getAnimeById(id);

@@ -23,7 +23,7 @@ object AnicodeClient {
 
 case class AnicodeClient(anicode: AnicodeCLI) {
   def dispatch(action: AnicodeAction): Unit = action match {
-    case GetAnimeList => anicode.getAnimeList()
+    case GetAnimeList => anicode.displayAnimeList()
     case GetEpisodeList(id) => anicode.getEpisodeList(id)
     case NormalPlay(id, ep) => anicode.normalPlay(id, ep)
     case SequentialPlay => anicode.sequentialPlay()

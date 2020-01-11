@@ -16,10 +16,10 @@ public class AnicodeCLI extends Anicode {
 		}
 	}
 
-    public void getAnimeList() {
+  public void displayAnimeList() {
 		int n = 1;
-		for (String animeName : getAnimeNameList()) {
-			System.out.println(n + " : " + animeName);
+		for (Anime anime : getAnimeList()) {
+			System.out.println(n + " : " + anime.getName() + " latestEps: " + anime.getLatestEpisode().orElse(0));
 			n++;
 		}
 	}
