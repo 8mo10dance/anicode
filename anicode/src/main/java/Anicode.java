@@ -1,3 +1,5 @@
+import entity.History;
+
 import java.io.File;
 import java.util.*;
 import java.util.stream.Collectors;

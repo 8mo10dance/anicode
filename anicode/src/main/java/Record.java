@@ -1,3 +1,5 @@
+import entity.History;
+
 import java.io.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -22,12 +24,17 @@ public class Record {
         var historyFile = getHistoryFile(animeName).orElse(new File(rootDirectory.getPath() + "/" + animeName + ".txt"));
         try {
             PrintWriter pw = new PrintWriter(new OutputStreamWriter(new FileOutputStream(historyFile, true)));
-            pw.println(history.toString());
+            pw.println(formatHistory(history));
             pw.close();
         } catch (FileNotFoundException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+    }
+
+    private String formatHistory(History history) {
+      SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
+      return sdf.format(history.createdAt) + ":" + history.ep;
     }
 
     private Optional<File> getHistoryFile(String animeName) {

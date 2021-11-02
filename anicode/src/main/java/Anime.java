@@ -1,4 +1,5 @@
 import entity.Episode;
+import entity.History;
 
 import java.io.File;
 import java.util.*;
@@ -44,15 +45,15 @@ public class Anime {
     }
 
     public Optional<History> getLatestHistory() {
-        return histories.stream().max(Comparator.comparing(History::getCreatedAt));
+        return histories.stream().max(Comparator.comparing(h -> h.createdAt));
     }
 
     public Date getUpdatedAt() {
-        return getLatestHistory().map(History::getCreatedAt).orElse(History.defaultCreatedAt());
+        return getLatestHistory().map(h -> h.createdAt).orElse(defaultHistoryCreatedAt());
     }
 
     public Optional<Integer> getLatestEpisode() {
-        return getLatestHistory().map(History::getEp);
+        return getLatestHistory().map(h -> h.ep);
     }
 
     public Optional<Integer> getNextEpisode() {
@@ -73,4 +74,10 @@ public class Anime {
         return ep > 0 && ep <= getEpisodeFiles().size();
     }
 
+  private Date defaultHistoryCreatedAt() {
+    var d = new Date();
+    d.setTime(0);
+
+    return d;
+  }
 }
