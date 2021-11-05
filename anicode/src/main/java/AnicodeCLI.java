@@ -11,15 +11,12 @@ import java.util.Random;
  * 2015/10/30 launch
  *  */
 public class AnicodeCLI extends Anicode {
-
-	private Player player;
-
 	public AnicodeCLI(String animeDirPath, String recordDirPath, String playerPath) throws Exception {
 		super(animeDirPath, recordDirPath);
 		if (playerPath.equals("mock")) {
-			this.player = new MockPlayer();
+      MockPlayer.createMockPlayer();
 		} else {
-			this.player = new ExternalPlayer(playerPath);
+			ExternalPlayer.createExternalPlayer(playerPath);
 		}
 	}
 
@@ -38,7 +35,7 @@ public class AnicodeCLI extends Anicode {
 	public void normalPlay(int id, int ep) throws FileNotFoundException, ParseException {
 		var pathOpt = getAnimeFilePath(id, ep);
 		if (pathOpt.isPresent()) {
-			player.play(pathOpt.get());
+			Player.getPlayer().play(pathOpt.get());
 			save(id, ep);
 		} else {
 			System.out.println("NO SUCH ANIME or EPISODE !");
@@ -57,7 +54,7 @@ public class AnicodeCLI extends Anicode {
 		var anime = animeList.get(index);
 		int ep = anime.getNextEpisode().get();
 		System.out.println("now play " + ep);
-		player.play(anime.getAnimeFilePath(ep).get());
+		Player.getPlayer().play(anime.getAnimeFilePath(ep).get());
 		save(anime, ep);
     }
 
@@ -67,7 +64,7 @@ public class AnicodeCLI extends Anicode {
 		var pathOpt = nextEpOpt.flatMap(ep -> animeOpt.flatMap(anime -> anime.getAnimeFilePath(ep)));
 		if (pathOpt.isPresent()) {
 			System.out.println("now play " + nextEpOpt.get());
-			player.play(pathOpt.get());
+			Player.getPlayer().play(pathOpt.get());
 			save(animeOpt.get(), nextEpOpt.get());
 		} else {
 			System.out.println("NO NEXT EPISODE");

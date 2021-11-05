@@ -1,12 +1,13 @@
 import java.io.File;
 import java.io.IOException;
 
-public class ExternalPlayer implements Player {
+public class ExternalPlayer extends Player {
     private final String playerCmd;
 
-    public ExternalPlayer(String playerCmd) {
-        this.playerCmd = playerCmd;
-    }
+  private ExternalPlayer(String playerCmd) {
+    super();
+    this.playerCmd = playerCmd;
+  }
 
     public void play(File target) {
         Runtime rt = Runtime.getRuntime();
@@ -18,5 +19,9 @@ public class ExternalPlayer implements Player {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static void createExternalPlayer(String playerCmd) {
+      Player.player = new ExternalPlayer(playerCmd);
     }
 }
