@@ -1,6 +1,7 @@
 import entity.Anime;
 import entity.Episode;
 import entity.History;
+import repository.AnimeRepository;
 import repository.HistoryRepository;
 
 import java.io.File;
