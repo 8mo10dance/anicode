@@ -20,7 +20,7 @@ object AnicodeClient {
         new AnicodeCLI()
       }
     } match {
-      case Some(anicode) => new AnicodeClient(anicode)
+      case Some(anicode) => new AnicodeClient(AnicodeService(anicode))
       case None => null // TODO
     }
   }
@@ -32,7 +32,7 @@ object AnicodeClient {
     aOpt.flatMap(a => bOpt.map(b => f(a, b)))
 }
 
-case class AnicodeClient(anicode: AnicodeCLI) {
+case class AnicodeClient(anicode: AnicodeService) {
   def dispatch(action: AnicodeAction): Unit = action match {
     case GetAnimeList => anicode.displayAnimeList()
     case GetEpisodeList(id) => anicode.getEpisodeList(id)
