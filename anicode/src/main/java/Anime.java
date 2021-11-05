@@ -7,7 +7,6 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class Anime {
-    private List<History> histories;
   private final entity.Anime anime;
 
     public Anime(File rootDirectory, List<History> histories) {
@@ -20,8 +19,7 @@ public class Anime {
         episodeList.add(new Episode(ep, file));
         ep++;
       }
-      this.anime = new entity.Anime(animeName, episodeList);
-      this.histories = histories;
+      this.anime = new entity.Anime(animeName, episodeList, histories);
     }
 
     public String getName() {
@@ -33,7 +31,7 @@ public class Anime {
     }
 
     public List<History> getHistories() {
-        return histories;
+        return this.anime.historyList;
     }
 
     public Optional<File> getAnimeFilePath(int ep) {
@@ -45,7 +43,7 @@ public class Anime {
     }
 
     public Optional<History> getLatestHistory() {
-        return histories.stream().max(Comparator.comparing(h -> h.createdAt));
+        return this.anime.historyList.stream().max(Comparator.comparing(h -> h.createdAt));
     }
 
     public Date getUpdatedAt() {
