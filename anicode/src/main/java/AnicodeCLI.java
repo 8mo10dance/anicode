@@ -11,15 +11,6 @@ import java.util.Random;
  * 2015/10/30 launch
  *  */
 public class AnicodeCLI extends Anicode {
-	public AnicodeCLI(String animeDirPath, String recordDirPath, String playerPath) throws Exception {
-		super(animeDirPath, recordDirPath);
-		if (playerPath.equals("mock")) {
-      MockPlayer.createMockPlayer();
-		} else {
-			ExternalPlayer.createExternalPlayer(playerPath);
-		}
-	}
-
   public void displayAnimeList() throws FileNotFoundException, ParseException {
 		int n = 1;
 		for (Anime anime : AnimeRepository.getAnimeRepository().getAnimeList()) {

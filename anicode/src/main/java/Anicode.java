@@ -11,21 +11,8 @@ import java.util.stream.Collectors;
 /** anicode ver2.4 -Unicorn-
  * 2015/10/30 launch */
 public class Anicode {
-
-    public Anicode(String animeDirPath, String recordPath) throws Exception {
-		var animeDir = new File(animeDirPath);
-		HistoryRepository.createHistoryRepository(recordPath);
-		var animeList = new ArrayList<Anime>();
-		for (File file: animeDir.listFiles()) {
-		  if (file.isDirectory()) {
-		    animeList.add(createAnime(file, HistoryRepository.getHistoryRepository().getHistoryListByAnimeName(file.getName())));
-      }
-    }
-      this.animeList = animeList;
-    }
-
 	public List<History> getHistoriesByAnimeId(int id, int limit) throws FileNotFoundException, ParseException {
-		var anime = animeRepository.getAnimeById(id);
+		var anime = AnimeRepository.getAnimeRepository().getAnimeById(id);
 		var histories = anime.historyList;
 		var latestHistories = new ArrayList<History>();
 		for (int i = 0; i < limit; i++) {
@@ -39,7 +26,7 @@ public class Anicode {
 	}
 
 	public Optional<File> getAnimeFilePath(int id, int ep) throws FileNotFoundException, ParseException {
-		var anime = animeRepository.getAnimeById(id);
+		var anime = AnimeRepository.getAnimeRepository().getAnimeById(id);
 
 		return anime.getAnimeFilePath(ep);
 	}
@@ -51,16 +38,16 @@ public class Anicode {
 	}
 
     public void save(int id, int ep) throws FileNotFoundException, ParseException {
-		var anime = animeRepository.getAnimeById(id);
+		var anime = AnimeRepository.getAnimeRepository().getAnimeById(id);
 		save(anime, ep);
     }
 
     public Optional<entity.Anime> getLastWatchedAnime() throws FileNotFoundException, ParseException {
-		return animeRepository.getAnimeList().stream().max(Comparator.comparing(a -> a.getUpdatedAt()));
+		return AnimeRepository.getAnimeRepository().getAnimeList().stream().max(Comparator.comparing(a -> a.getUpdatedAt()));
 	}
 
 	public List<entity.Anime> getOnGoingAnimeList() throws FileNotFoundException, ParseException {
-		return animeRepository.getAnimeList().stream().filter(a -> a.isOnGoing()).collect(Collectors.toList());
+		return AnimeRepository.getAnimeRepository().getAnimeList().stream().filter(a -> a.isOnGoing()).collect(Collectors.toList());
 	}
 
 }
