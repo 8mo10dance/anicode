@@ -17,7 +17,7 @@ object AnicodeClient {
         } else {
           ExternalPlayer.createExternalPlayer(playerPath)
         }
-        new AnicodeCLI()
+        new Anicode()
       }
     } match {
       case Some(anicode) => new AnicodeClient(AnicodeService(anicode))
