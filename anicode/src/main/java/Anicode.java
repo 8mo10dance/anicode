@@ -1,7 +1,10 @@
+import entity.Anime;
 import entity.Episode;
 import entity.History;
+import repository.HistoryRepository;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -11,16 +14,18 @@ import java.util.stream.Collectors;
 public class Anicode {
 
     private List<entity.Anime> animeList;
-	private Record record;
+    private HistoryRepository historyRepository;
 
-    public Anicode(String animeDirPath, String recordPath) {
+    public Anicode(String animeDirPath, String recordPath) throws Exception {
 		var animeDir = new File(animeDirPath);
-		this.record = new Record(new File(recordPath));
-		this.animeList = Arrays
-				.stream(animeDir.listFiles())
-				.filter(File::isDirectory)
-				.map(f -> createAnime(f, record.getHistoriesByAnimeName(f.getName())))
-				.collect(Collectors.toList());
+		this.historyRepository = HistoryRepository.createHistoryRepository(recordPath);
+		var animeList = new ArrayList<Anime>();
+		for (File file: animeDir.listFiles()) {
+		  if (file.isDirectory()) {
+		    animeList.add(createAnime(file, historyRepository.getHistoryListByAnimeName(file.getName())));
+      }
+    }
+      this.animeList = animeList;
     }
 
   public List<entity.Anime> getAnimeList() {
@@ -47,13 +52,13 @@ public class Anicode {
 		return anime.getAnimeFilePath(ep);
 	}
 
-	public void save(entity.Anime anime, int ep) {
+	public void save(entity.Anime anime, int ep) throws FileNotFoundException {
 		Calendar c = Calendar.getInstance();
 		var history = new History(ep, c.getTime());
-		record.updateHistory(anime.name, history);
+		historyRepository.save(anime, history);
 	}
 
-    public void save(int id, int ep) {
+    public void save(int id, int ep) throws FileNotFoundException {
 		var anime = getAnimeById(id);
 		save(anime, ep);
     }

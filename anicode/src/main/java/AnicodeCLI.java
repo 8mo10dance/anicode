@@ -2,6 +2,7 @@ import entity.Anime;
 import entity.History;
 
 import java.text.SimpleDateFormat;
+import java.io.FileNotFoundException;
 import java.util.Random;
 
 /** Anicode2.4 -Unicorn-
@@ -11,7 +12,7 @@ public class AnicodeCLI extends Anicode {
 
 	private Player player;
 
-	public AnicodeCLI(String animeDirPath, String recordDirPath, String playerPath) {
+	public AnicodeCLI(String animeDirPath, String recordDirPath, String playerPath) throws Exception {
 		super(animeDirPath, recordDirPath);
 		if (playerPath.equals("mock")) {
 			this.player = new MockPlayer();
@@ -32,7 +33,7 @@ public class AnicodeCLI extends Anicode {
 		getHistoriesByAnimeId(id, 3).forEach(h -> System.out.println(formatHistory(h)));
 	}
 
-	public void normalPlay(int id, int ep) {
+	public void normalPlay(int id, int ep) throws FileNotFoundException {
 		var pathOpt = getAnimeFilePath(id, ep);
 		if (pathOpt.isPresent()) {
 			player.play(pathOpt.get());
@@ -42,7 +43,7 @@ public class AnicodeCLI extends Anicode {
 		}
 	}
 
-    public void randomPlay() {
+    public void randomPlay() throws FileNotFoundException {
 		var animeList = getOnGoingAnimeList();
 		if (animeList.isEmpty()) {
 			System.out.println("no ongoing anime");
@@ -58,7 +59,7 @@ public class AnicodeCLI extends Anicode {
 		save(anime, ep);
     }
 
-    public void sequentialPlay() {
+    public void sequentialPlay() throws FileNotFoundException {
 		var animeOpt = getLastWatchedAnime();
 		var nextEpOpt = animeOpt.flatMap(a -> a.getNextEpisode());
 		var pathOpt = nextEpOpt.flatMap(ep -> animeOpt.flatMap(anime -> anime.getAnimeFilePath(ep)));
