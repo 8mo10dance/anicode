@@ -1,3 +1,6 @@
+import entity.History;
+
+import java.text.SimpleDateFormat;
 import java.util.Random;
 
 /** Anicode2.4 -Unicorn-
@@ -25,7 +28,7 @@ public class AnicodeCLI extends Anicode {
 	}
 
 	public void getEpisodeList(int id) {
-		getHistoriesByAnimeId(id, 3).forEach(System.out::println);
+		getHistoriesByAnimeId(id, 3).forEach(h -> System.out.println(formatHistory(h)));
 	}
 
 	public void normalPlay(int id, int ep) {
@@ -66,4 +69,9 @@ public class AnicodeCLI extends Anicode {
 			System.out.println("NO NEXT EPISODE");
 		}
     }
+
+  private String formatHistory(History history) {
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
+    return sdf.format(history.createdAt) + ":" + history.ep;
+  }
 }
