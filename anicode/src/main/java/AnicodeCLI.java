@@ -1,3 +1,4 @@
+import entity.Anime;
 import entity.History;
 
 import java.text.SimpleDateFormat;
@@ -22,7 +23,7 @@ public class AnicodeCLI extends Anicode {
   public void displayAnimeList() {
 		int n = 1;
 		for (Anime anime : getAnimeList()) {
-			System.out.println(n + " : " + anime.getName() + " latestEps: " + anime.getLatestEpisode().orElse(0));
+			System.out.println(n + " : " + anime.name + " latestEps: " + anime.getLatestHistory().map(h -> h.ep).orElse(0));
 			n++;
 		}
 	}
@@ -59,7 +60,7 @@ public class AnicodeCLI extends Anicode {
 
     public void sequentialPlay() {
 		var animeOpt = getLastWatchedAnime();
-		var nextEpOpt = animeOpt.flatMap(Anime::getNextEpisode);
+		var nextEpOpt = animeOpt.flatMap(a -> a.getNextEpisode());
 		var pathOpt = nextEpOpt.flatMap(ep -> animeOpt.flatMap(anime -> anime.getAnimeFilePath(ep)));
 		if (pathOpt.isPresent()) {
 			System.out.println("now play " + nextEpOpt.get());
