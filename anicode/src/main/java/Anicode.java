@@ -14,15 +14,14 @@ import java.util.stream.Collectors;
 public class Anicode {
 
     private List<entity.Anime> animeList;
-    private HistoryRepository historyRepository;
 
     public Anicode(String animeDirPath, String recordPath) throws Exception {
 		var animeDir = new File(animeDirPath);
-		this.historyRepository = HistoryRepository.createHistoryRepository(recordPath);
+		HistoryRepository.createHistoryRepository(recordPath);
 		var animeList = new ArrayList<Anime>();
 		for (File file: animeDir.listFiles()) {
 		  if (file.isDirectory()) {
-		    animeList.add(createAnime(file, historyRepository.getHistoryListByAnimeName(file.getName())));
+		    animeList.add(createAnime(file, HistoryRepository.getHistoryRepository().getHistoryListByAnimeName(file.getName())));
       }
     }
       this.animeList = animeList;
@@ -55,7 +54,7 @@ public class Anicode {
 	public void save(entity.Anime anime, int ep) throws FileNotFoundException {
 		Calendar c = Calendar.getInstance();
 		var history = new History(ep, c.getTime());
-		historyRepository.save(anime, history);
+		HistoryRepository.getHistoryRepository().save(anime, history);
 	}
 
     public void save(int id, int ep) throws FileNotFoundException {
