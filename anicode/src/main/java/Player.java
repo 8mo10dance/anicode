@@ -1,5 +1,15 @@
 import java.io.File;
 
-public interface Player {
-    public void play(File target);
+public abstract class Player {
+  protected static Player player;
+
+  protected Player() {
+    super();
+  }
+
+  public abstract void play(File target);
+
+  public static Player getPlayer() {
+    return Player.player;
+  }
 }

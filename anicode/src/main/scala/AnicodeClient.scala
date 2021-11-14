@@ -1,3 +1,5 @@
+import repository.{AnimeRepository, HistoryRepository}
+
 import scala.io.Source
 
 object AnicodeClient {
@@ -7,7 +9,16 @@ object AnicodeClient {
     }).toMap
 
     accumlateOptionList(Seq("ANIME_DIR", "RECORD_DIR", "PLAYER").map(config.get(_))).map {
-      case animeDirPath +: recordDirPath +: playerPath +: Nil => new AnicodeCLI(animeDirPath, recordDirPath, playerPath)
+      case animeDirPath +: recordDirPath +: playerPath +: Nil => {
+        AnimeRepository.createAnimeRepository(animeDirPath)
+        HistoryRepository.createHistoryRepository(recordDirPath)
+        if (playerPath == "mock") {
+          MockPlayer.createMockPlayer()
+        } else {
+          ExternalPlayer.createExternalPlayer(playerPath)
+        }
+        new AnicodeCLI()
+      }
     } match {
       case Some(anicode) => new AnicodeClient(anicode)
       case None => null // TODO
