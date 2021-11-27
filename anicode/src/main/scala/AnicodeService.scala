@@ -45,10 +45,11 @@ case class AnicodeService (anicode: Anicode) {
   }
 
   def normalPlay(id: Int, ep: Int): Unit = {
-    val pathOpt = anicode.getAnimeFilePath(id, ep)
-    if (pathOpt.isPresent) {
-      Player.getPlayer.play(pathOpt.get())
-      anicode.save(id, ep)
+    val anime = AnimeRepository.getAnimeRepository.getAnimeById(id)
+    val epOpt = anime.getEpidodeByEp(ep)
+    if (epOpt.isPresent) {
+      Player.getPlayer.play(epOpt.get().file)
+      anicode.save(anime, ep)
     } else {
       println("NO SUCH ANIME or EPISODE !")
     }

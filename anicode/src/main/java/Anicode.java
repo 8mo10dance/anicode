@@ -25,22 +25,11 @@ public class Anicode {
 		return latestHistories;
 	}
 
-	public Optional<File> getAnimeFilePath(int id, int ep) throws FileNotFoundException, ParseException {
-		var anime = AnimeRepository.getAnimeRepository().getAnimeById(id);
-
-		return anime.getAnimeFilePath(ep);
-	}
-
 	public void save(entity.Anime anime, int ep) throws FileNotFoundException {
 		Calendar c = Calendar.getInstance();
 		var history = new History(ep, c.getTime());
 		HistoryRepository.getHistoryRepository().save(anime, history);
 	}
-
-    public void save(int id, int ep) throws FileNotFoundException, ParseException {
-		var anime = AnimeRepository.getAnimeRepository().getAnimeById(id);
-		save(anime, ep);
-    }
 
     public Optional<entity.Anime> getLastWatchedAnime() throws FileNotFoundException, ParseException {
 		return AnimeRepository.getAnimeRepository().getAnimeList().stream().max(Comparator.comparing(a -> a.getUpdatedAt()));
