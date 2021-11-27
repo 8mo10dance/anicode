@@ -1,14 +1,11 @@
 import repository.AnimeRepository
 import view.AnicodeView
 
-import collection.JavaConverters._
 import scala.util.Random
 
 case class AnicodeController(view: AnicodeView) {
-  val anicode = new Anicode()
-
   def randomPlay(): Unit = {
-    val animeList = anicode.getOnGoingAnimeList.asScala.toSeq
+    val animeList = AnicodeService.getOnGoingAnimeList
     animeList match {
       case Nil => {
         view.renderNotFoundOnGoingAnime
@@ -19,26 +16,21 @@ case class AnicodeController(view: AnicodeView) {
         val ep = anime.getNextEpisode.get()
         view.renderPlay(anime, ep)
         Player.getPlayer.play(anime.getAnimeFilePath(ep).get())
-        anicode.save(anime, ep)
+        AnicodeService.save(anime, ep)
       }
     }
   }
 
   def sequentialPlay(): Unit = {
-    val animeOpt = anicode.getLastWatchedAnime
-    if (animeOpt.isPresent) {
-      val anime = animeOpt.get()
-      val nextEpOpt = anime.getNextEpisode
-      if (nextEpOpt.isPresent) {
-        val ep = nextEpOpt.get()
-        val pathOpt = anime.getAnimeFilePath(ep)
-        if (pathOpt.isPresent) {
-          view.renderPlay(anime, ep)
-          Player.getPlayer.play(pathOpt.get())
-          anicode.save(anime, ep)
-        } else {
-          view.renderNotFoundNextEpisode
-        }
+    val anime = AnicodeService.getLastWatchedAnime
+    val nextEpOpt = anime.getNextEpisode
+    if (nextEpOpt.isPresent) {
+      val ep = nextEpOpt.get()
+      val pathOpt = anime.getAnimeFilePath(ep)
+      if (pathOpt.isPresent) {
+        view.renderPlay(anime, ep)
+        Player.getPlayer.play(pathOpt.get())
+        AnicodeService.save(anime, ep)
       } else {
         view.renderNotFoundNextEpisode
       }
@@ -52,19 +44,19 @@ case class AnicodeController(view: AnicodeView) {
     val epOpt = anime.getEpidodeByEp(ep)
     if (epOpt.isPresent) {
       Player.getPlayer.play(epOpt.get().file)
-      anicode.save(anime, ep)
+      AnicodeService.save(anime, ep)
     } else {
       view.renderNotFoundEpisode(anime, ep)
     }
   }
 
   def displayEpisodeList(id: Int): Unit = {
-    val historyList = anicode.getHistoriesByAnimeId(id, 3).asScala
+    val historyList = AnicodeService.getHistoryListByAnimeId(id).reverse.take(3)
     view.renderHistoryList(historyList)
   }
 
   def displayAnimeList(): Unit = {
-    val animeList = AnimeRepository.getAnimeRepository.getAnimeList.asScala
+    val animeList = AnicodeService.getAnimeList
     view.renderAnimeList(animeList)
   }
 }
