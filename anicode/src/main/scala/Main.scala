@@ -1,3 +1,5 @@
+import view.CLIView
+
 object Main {
   def parseOpt(args: Seq[String], boolOpts: Set[String], valueOpts: Map[String, String]): (Set[String], Map[String, String]) = {
     val optPattern = """-(\w+)""".r
@@ -31,7 +33,7 @@ object Main {
   def main(args: Array[String]) {
     val (boolOpts, valueOpts) = parseOpt(args.toSeq, Set.empty, Map.empty)
     val profile = valueOpts.getOrElse("profile", ".anicode_profile")
-    val client = AnicodeClient(profile)
+    val client = AnicodeClient(profile, CLIView)
     val action = getAction(boolOpts, valueOpts)
     client.dispatch(action)
   }
