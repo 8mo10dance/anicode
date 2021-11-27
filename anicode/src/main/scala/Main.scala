@@ -1,4 +1,7 @@
-import view.CLIView
+import repository.{AnimeRepository, HistoryRepository}
+import view.{AnicodeView, CLIView}
+
+import scala.io.Source
 
 object Main {
   def parseOpt(args: Seq[String], boolOpts: Set[String], valueOpts: Map[String, String]): (Set[String], Map[String, String]) = {
@@ -33,8 +36,40 @@ object Main {
   def main(args: Array[String]) {
     val (boolOpts, valueOpts) = parseOpt(args.toSeq, Set.empty, Map.empty)
     val profile = valueOpts.getOrElse("profile", ".anicode_profile")
-    val client = AnicodeClient(profile, CLIView)
-    val action = getAction(boolOpts, valueOpts)
-    client.dispatch(action)
+    val anicodeOpt = buildAnicode(profile, CLIView)
+    anicodeOpt match {
+      case Some(anicode) => {
+        val dispatcher = AnicodeDispatcher(AnicodeController(anicode, CLIView))
+        val action = getAction(boolOpts, valueOpts)
+        dispatcher.dispatch(action)
+      }
+      case None => // TODO
+    }
   }
+
+  private def buildAnicode(profile: String, view: AnicodeView): Option[Anicode] = {
+    val config = Source.fromFile(profile).getLines().map(_.split("=") match {
+      case Array(key, value) => (key, value)
+    }).toMap
+
+    accumlateOptionList(Seq("ANIME_DIR", "RECORD_DIR", "PLAYER").map(config.get(_))).map {
+      case animeDirPath +: recordDirPath +: playerPath +: Nil => {
+        AnimeRepository.createAnimeRepository(animeDirPath)
+        HistoryRepository.createHistoryRepository(recordDirPath)
+        if (playerPath == "mock") {
+          MockPlayer.createMockPlayer()
+        } else {
+          ExternalPlayer.createExternalPlayer(playerPath)
+        }
+        new Anicode()
+      }
+    }
+  }
+
+  private def accumlateOptionList[A](options: Seq[Option[A]]): Option[Seq[A]] =
+    options.foldRight[Option[List[A]]](Some(Nil))((option, acc) => map2(option, acc)(_ +: _))
+
+  private def map2[A, B, C](aOpt: Option[A], bOpt: Option[B])(f: (A, B) => C): Option[C] =
+    aOpt.flatMap(a => bOpt.map(b => f(a, b)))
+
 }
