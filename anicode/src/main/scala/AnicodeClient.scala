@@ -1,9 +1,10 @@
 import repository.{AnimeRepository, HistoryRepository}
+import view.AnicodeView
 
 import scala.io.Source
 
 object AnicodeClient {
-  def apply(profile: String): AnicodeClient = {
+  def apply(profile: String, view: AnicodeView): AnicodeClient = {
     val config = Source.fromFile(profile).getLines().map(_.split("=") match {
       case Array(key, value) => (key, value)
     }).toMap
@@ -20,7 +21,7 @@ object AnicodeClient {
         new Anicode()
       }
     } match {
-      case Some(anicode) => new AnicodeClient(AnicodeService(anicode))
+      case Some(anicode) => new AnicodeClient(AnicodeService(anicode, view))
       case None => null // TODO
     }
   }
@@ -35,7 +36,7 @@ object AnicodeClient {
 case class AnicodeClient(anicode: AnicodeService) {
   def dispatch(action: AnicodeAction): Unit = action match {
     case GetAnimeList => anicode.displayAnimeList()
-    case GetEpisodeList(id) => anicode.getEpisodeList(id)
+    case GetEpisodeList(id) => anicode.displayEpisodeList(id)
     case NormalPlay(id, ep) => anicode.normalPlay(id, ep)
     case SequentialPlay => anicode.sequentialPlay()
     case RandomPlay => anicode.randomPlay()

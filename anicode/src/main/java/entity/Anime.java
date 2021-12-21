@@ -18,6 +18,10 @@ public class Anime {
     this.historyList = historyList;
   }
 
+  public Optional<Episode> getEpidodeByEp(int ep) {
+    return episodeList.stream().filter(e -> e.ep == ep).findAny();
+  }
+
   public Optional<History> getLatestHistory() {
     return historyList.stream().max(Comparator.comparing(h -> h.createdAt));
   }
