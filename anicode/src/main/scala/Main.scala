@@ -1,3 +1,4 @@
+import repository.{AnimeRepository, HistoryRepository}
 import view.CLIView
 
 object Main {
@@ -32,9 +33,21 @@ object Main {
 
   def main(args: Array[String]) {
     val (boolOpts, valueOpts) = parseOpt(args.toSeq, Set.empty, Map.empty)
-    val profile = valueOpts.getOrElse("profile", ".anicode_profile")
-    val client = AnicodeClient(profile, CLIView)
+    val profilePath = valueOpts.getOrElse("profile", ".anicode_profile")
+    val profileOpt = AnicodeProfile.parse(profilePath)
+    profileOpt match {
+      case Some(AnicodeProfile(animeDirPath, recordDirPath, playerPath)) =>
+        AnimeRepository.createAnimeRepository(animeDirPath)
+        HistoryRepository.createHistoryRepository(recordDirPath)
+        if (playerPath == "mock") {
+          MockPlayer.createMockPlayer()
+        } else {
+          ExternalPlayer.createExternalPlayer(playerPath)
+        }
+      case None => // TODO
+    }
+    val dispatcher = AnicodeDispatcher(AnicodeController(CLIView))
     val action = getAction(boolOpts, valueOpts)
-    client.dispatch(action)
+    dispatcher.dispatch(action)
   }
 }

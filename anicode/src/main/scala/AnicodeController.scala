@@ -4,7 +4,9 @@ import view.AnicodeView
 import collection.JavaConverters._
 import scala.util.Random
 
-case class AnicodeService (anicode: Anicode, view: AnicodeView) {
+case class AnicodeController(view: AnicodeView) {
+  val anicode = new Anicode()
+
   def randomPlay(): Unit = {
     val animeList = anicode.getOnGoingAnimeList.asScala.toSeq
     animeList match {

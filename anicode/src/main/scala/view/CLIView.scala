@@ -16,7 +16,7 @@ object CLIView extends AnicodeView {
   }
 
   override def renderHistoryList(historyList: Seq[History]): Unit = {
-    historyList.foreach { println }
+    historyList.foreach { h => println(s"Episode ${h.ep}") }
   }
 
   override def renderPlay(anime: Anime, ep: Int): Unit = {
