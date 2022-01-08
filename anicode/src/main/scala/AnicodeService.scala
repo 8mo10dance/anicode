@@ -4,11 +4,11 @@ import repository.{AnimeRepository, HistoryRepository}
 import java.util.Calendar
 import scala.collection.JavaConverters.asScalaBufferConverter
 
-object AnicodeService {
-  def getAnimeList: Seq[Anime] = AnimeRepository.getAnimeRepository.getAnimeList.asScala
+case class AnicodeService(animeRepository: AnimeRepository, historyRepository: HistoryRepository) {
+  def getAnimeList: Seq[Anime] = animeRepository.getAnimeList.asScala
 
   def getAnimeById(id: Int): Option[Anime] = {
-    val anime = AnimeRepository.getAnimeRepository.getAnimeById(id)
+    val anime = animeRepository.getAnimeById(id)
     if (anime == null) {
       None
     } else {
@@ -28,6 +28,6 @@ object AnicodeService {
   def save(anime: Anime, ep: Int): Unit = {
     val c = Calendar.getInstance()
     val history = new History(ep, c.getTime)
-    HistoryRepository.getHistoryRepository.save(anime, history)
+    historyRepository.save(anime, history)
   }
 }

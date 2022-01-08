@@ -46,7 +46,9 @@ object Main {
         }
       case None => // TODO
     }
-    val dispatcher = AnicodeDispatcher(AnicodeController(CLIView))
+    val service = AnicodeService(AnimeRepository.getAnimeRepository, HistoryRepository.getHistoryRepository)
+    val controller = AnicodeController(service, Player.getPlayer, CLIView)
+    val dispatcher = AnicodeDispatcher(controller)
     val action = getAction(boolOpts, valueOpts)
     dispatcher.dispatch(action)
   }
