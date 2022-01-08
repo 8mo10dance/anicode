@@ -10,7 +10,8 @@ public class MockPlayer extends Player {
         System.out.println("Now playing " + target.getAbsolutePath());
     }
 
-  public static void createMockPlayer() {
+  public static Player createMockPlayer() {
     Player.player = new MockPlayer();
+    return player;
   }
 }
