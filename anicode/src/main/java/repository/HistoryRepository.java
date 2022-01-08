@@ -41,11 +41,12 @@ public class HistoryRepository {
     pw.close();
   }
 
-  public static void createHistoryRepository(String recordPath) throws Exception {
+  public static HistoryRepository createHistoryRepository(String recordPath) throws Exception {
     var rootDirectory = new File(recordPath);
     if (!rootDirectory.exists()) throw new FileNotFoundException("ディレクトリが存在しません。");
     if (!rootDirectory.isDirectory()) throw new Exception("ディレクトリが存在しません。");
     HistoryRepository.historyRepository = new HistoryRepository(rootDirectory);
+    return historyRepository;
   }
 
   public static HistoryRepository getHistoryRepository() {

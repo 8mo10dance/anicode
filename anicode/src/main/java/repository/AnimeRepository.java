@@ -37,16 +37,13 @@ public class AnimeRepository {
     return getAnimeList().get(id - 1);
   }
 
-  public static void createAnimeRepository(String directoryPath) throws Exception {
+  public static AnimeRepository createAnimeRepository(String directoryPath) throws Exception {
     var directory = new File(directoryPath);
     if (!directory.exists()) throw new FileNotFoundException("ディレクトリではありません。");
     if (!directory.isDirectory()) throw new Exception("ディレクトリではありません。");
 
     AnimeRepository.animeRepository = new AnimeRepository(directory);
-  }
-
-  public static AnimeRepository getAnimeRepository() {
-    return AnimeRepository.animeRepository;
+    return animeRepository;
   }
 
   private entity.Anime createAnime(File rootDirectory, List<History> histories) {

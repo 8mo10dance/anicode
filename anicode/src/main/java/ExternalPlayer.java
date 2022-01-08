@@ -21,7 +21,8 @@ public class ExternalPlayer extends Player {
         }
     }
 
-    public static void createExternalPlayer(String playerCmd) {
+    public static Player createExternalPlayer(String playerCmd) {
       Player.player = new ExternalPlayer(playerCmd);
+      return player;
     }
 }

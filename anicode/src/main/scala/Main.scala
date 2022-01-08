@@ -37,17 +37,19 @@ object Main {
     val profileOpt = AnicodeProfile.parse(profilePath)
     profileOpt match {
       case Some(AnicodeProfile(animeDirPath, recordDirPath, playerPath)) =>
-        AnimeRepository.createAnimeRepository(animeDirPath)
-        HistoryRepository.createHistoryRepository(recordDirPath)
-        if (playerPath == "mock") {
+        val animeRepository = AnimeRepository.createAnimeRepository(animeDirPath)
+        val historyRepository = HistoryRepository.createHistoryRepository(recordDirPath)
+        val player = if (playerPath == "mock") {
           MockPlayer.createMockPlayer()
         } else {
           ExternalPlayer.createExternalPlayer(playerPath)
         }
+        val service = AnicodeService(animeRepository, historyRepository)
+        val controller = AnicodeController(service, player, CLIView)
+        val dispatcher = AnicodeDispatcher(controller)
+        val action = getAction(boolOpts, valueOpts)
+        dispatcher.dispatch(action)
       case None => // TODO
     }
-    val dispatcher = AnicodeDispatcher(AnicodeController(CLIView))
-    val action = getAction(boolOpts, valueOpts)
-    dispatcher.dispatch(action)
   }
 }
