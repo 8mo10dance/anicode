@@ -46,10 +46,6 @@ public class AnimeRepository {
     return animeRepository;
   }
 
-  public static AnimeRepository getAnimeRepository() {
-    return AnimeRepository.animeRepository;
-  }
-
   private entity.Anime createAnime(File rootDirectory, List<History> histories) {
     String animeName = rootDirectory.getName();
     Pattern p = Pattern.compile(".+[mp4|mkv]");

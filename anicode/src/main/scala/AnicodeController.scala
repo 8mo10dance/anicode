@@ -40,7 +40,7 @@ case class AnicodeController(anicodeService: AnicodeService, player: Player, vie
   }
 
   def normalPlay(id: Int, ep: Int): Unit = {
-    val anime = AnimeRepository.getAnimeRepository.getAnimeById(id)
+    val anime = anicodeService.animeRepository.getAnimeById(id)
     val epOpt = anime.getEpidodeByEp(ep)
     if (epOpt.isPresent) {
       player.play(epOpt.get().file)
