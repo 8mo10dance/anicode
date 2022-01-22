@@ -1,0 +1,9 @@
+version: '3'
+
+services:
+  sbt:
+    image: 'hseeberger/scala-sbt:graalvm-ce-19.3.0-java11_1.3.6_2.12.10'
+    command: sbt assembly
+    working_dir: /anicode
+    volumes:
+      - ./anicode:/anicode
