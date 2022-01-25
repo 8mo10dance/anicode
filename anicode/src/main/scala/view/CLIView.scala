@@ -8,9 +8,8 @@ object CLIView extends AnicodeView {
       case (anime, index) => {
         val id = index + 1
         val latestHistoryOpt = anime.getLatestHistory
-        if (latestHistoryOpt.isPresent) {
-          println(s"${id} : ${anime.name} latestEps: ${latestHistoryOpt.get().ep}")
-        }
+        val latestEpisode = if (latestHistoryOpt.isPresent()) latestHistoryOpt.get().ep else 0
+        println(s"${id} : ${anime.name} latestEps: ${latestEpisode}")
       }
     }
   }
